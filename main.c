@@ -132,31 +132,30 @@ void rc5_key(rc5_ctx *c, u1 *key, int keylen)
     free(pk);
 }
 
-int main(void)
+void main(void)
 {
     rc5_ctx c;
     u4 data[8];
-    //char key[] = "ABCDE";
-    /* generate randon key by random() function */
-    int key[5];
-    for (int j = 0; j < 5; j++)
-        key[j] = rand() % 256; // Random byte
+    char key[] = "ABCDE";
     int i;
     printf("-----------------------------------------------\n");
+    
     for (i = 0; i < 8; i++)
         data[i] = i;
+    
     rc5_init(&c, 10); /* 10 rounds */
     rc5_key(&c, (u1 *)key, 5);
     rc5_encrypt(&c, data, 4);
+
     printf("Encryptions:\n");
     for (i = 0; i < 8; i += 2)
         printf("Block %01d = %08lx %08lx\n", i / 2, data[i], data[i + 1]);
-
+    
     rc5_decrypt(&c, data, 2);
     rc5_decrypt(&c, data + 4, 2);
+   
     printf("Decryptions:\n");
     for (i = 0; i < 8; i += 2)
         printf("Block %01d = %08lx %08lx\n", i / 2, data[i], data[i + 1]);
     rc5_destroy(&c);
-    return 0;
 }
